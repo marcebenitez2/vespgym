@@ -30,14 +30,8 @@ export function CarouselPlugin() {
     >
       <CarouselContent>
         {imagenes.map((imagen, index) => (
-          <CarouselItem key={index}>
-            <Image
-              src={imagen}
-              alt="Gimnasio"
-              layout="responsive"
-              width={100}
-              height={100}
-            />
+          <CarouselItem key={index} className="w-full max-h-screen">
+            <Image src={imagen} alt="Gimnasio" layout="responsive" width={500} height={300} objectFit="cover"/>
           </CarouselItem>
         ))}
       </CarouselContent>
