@@ -37,11 +37,10 @@ function Register() {
     const email: string = emailRef.current.value;
     const password: string = passwordRef.current.value;
     const name: string = nameRef.current.value;
-    const tel: number = Number(telRef.current.value);
+    const tel: string = telRef.current.value;
     const direc: string = direcRef.current.value;
 
     const user = await registerUser(email, password, name, tel, direc);
-    console.log(user);
   };
 
   return (
@@ -66,16 +65,16 @@ function Register() {
             type="text"
             id="name"
             placeholder="Roman Berrugas"
-            ref={emailRef}
+            ref={nameRef}
           />
           <Label>Telefono</Label>
-          <Input type="tel" id="tel" placeholder="3415690480" ref={emailRef} />
+          <Input type="tel" id="tel" placeholder="3415690480" ref={telRef} />
           <Label>Direccion</Label>
           <Input
             type="text"
             id="direc"
             placeholder="Ameghino 12"
-            ref={emailRef}
+            ref={direcRef}
           />
           <Label>Contraseña</Label>
           <Input
