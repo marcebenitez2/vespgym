@@ -17,24 +17,31 @@ import { toast } from "sonner";
 function Register() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const telRef = useRef<HTMLInputElement>(null);
+  const direcRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!emailRef.current || !passwordRef.current) {
+    if (
+      !emailRef.current ||
+      !passwordRef.current ||
+      !nameRef.current ||
+      !telRef.current ||
+      !direcRef.current
+    ) {
       return;
     }
 
     const email: string = emailRef.current.value;
     const password: string = passwordRef.current.value;
+    const name: string = nameRef.current.value;
+    const tel: number = Number(telRef.current.value);
+    const direc: string = direcRef.current.value;
 
-    await registerUser(email, password)
-      .then(() => {
-        toast("Usuario registrado con éxito! ✅");
-      })
-      .catch((error) => {
-        toast(error.message);
-      });
+    const user = await registerUser(email, password, name, tel, direc);
+    console.log(user);
   };
 
   return (
@@ -52,6 +59,22 @@ function Register() {
             type="email"
             id="email"
             placeholder="roman@gmail.com"
+            ref={emailRef}
+          />
+          <Label>Nombre</Label>
+          <Input
+            type="text"
+            id="name"
+            placeholder="Roman Berrugas"
+            ref={emailRef}
+          />
+          <Label>Telefono</Label>
+          <Input type="tel" id="tel" placeholder="3415690480" ref={emailRef} />
+          <Label>Direccion</Label>
+          <Input
+            type="text"
+            id="direc"
+            placeholder="Ameghino 12"
             ref={emailRef}
           />
           <Label>Contraseña</Label>

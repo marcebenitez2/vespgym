@@ -10,9 +10,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import ToggleLoginRegister from "./toggleLoginRegister";
+import { FormEvent, useRef } from "react";
+import { loginUser } from "../lib/firebase/login.js";
 
 function Login() {
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!emailRef.current || !passwordRef.current) {
+      return;
+    }
+
+    const email: string = emailRef.current.value;
+    const password: string = passwordRef.current.value;
+
+    await loginUser(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Card className="w-2/3 pb-4">
       <CardHeader className="text-center">
@@ -24,13 +48,25 @@ function Login() {
       <CardContent className="w-full">
         <div className="grid w-full items-center gap-2">
           <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" placeholder="roman@gmail.com" />
+          <Input
+            type="email"
+            id="email"
+            placeholder="roman@gmail.com"
+            ref={emailRef}
+          />
           <Label htmlFor="email">Contraseña</Label>
-          <Input type="email" id="email" placeholder="**********" />
+          <Input
+            type="password"
+            id="password"
+            placeholder="**********"
+            ref={passwordRef}
+          />
         </div>
       </CardContent>
       <CardFooter>
-        <Button className="w-full">Iniciar sesion</Button>
+        <Button className="w-full" onClick={handleSubmit}>
+          Iniciar sesion
+        </Button>
       </CardFooter>
     </Card>
   );
