@@ -32,7 +32,6 @@ function Login() {
       <CardFooter>
         <Button className="w-full">Iniciar sesion</Button>
       </CardFooter>
-      <ToggleLoginRegister />
     </Card>
   );
 }

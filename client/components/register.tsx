@@ -15,8 +15,8 @@ import { Label } from "./ui/label";
 function Register() {
   return (
     <Card className="w-2/3 pb-4">
-      <CardHeader>
-        <CardTitle>Registrarse</CardTitle>
+      <CardHeader className="text-center">
+        <CardTitle className="text-yellow-400 text-3xl">Registrarse</CardTitle>
         <CardDescription>
           Nos encanta que se sume gente a entrenar!
         </CardDescription>
@@ -30,9 +30,8 @@ function Register() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button>Registrarse</Button>
+        <Button className="w-full">Registrarse</Button>
       </CardFooter>
-      <ToggleLoginRegister />
     </Card>
   );
 }
