@@ -23,21 +23,20 @@ export function CarouselPlugin() {
 
   return (
     <Carousel
-      className="w-full"
+      className="w-full h-screen"
       plugins={[plugin.current]}
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
-      <CarouselContent>
+      <CarouselContent className="h-full">
         {imagenes.map((imagen, index) => (
-          <CarouselItem key={index} className="w-full max-h-screen">
+          <CarouselItem key={index} className="w-full h-full relative">
             <Image
+            priority={true}
               src={imagen}
               alt="Gimnasio"
-              layout="responsive"
-              width={500}
-              height={500}
-              objectFit="cover"
+              fill={true}
+              sizes="100%"
             />
           </CarouselItem>
         ))}
