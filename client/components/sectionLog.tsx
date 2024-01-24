@@ -8,8 +8,8 @@ function SectionLog() {
   const { register } = useLoginRegisterStore();
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4">
-      {register ? <Register /> : <Login />}
       <ToggleLoginRegister />
+      {register ? <Register /> : <Login />}
     </div>
   );
 }

@@ -38,7 +38,7 @@ function Login() {
   };
 
   return (
-    <Card className="w-2/3 pb-4">
+    <Card className="w-2/3 pb-4 animate-fade animate-once animate-duration-500">
       <CardHeader className="text-center">
         <CardTitle className="text-yellow-400 text-3xl">Login</CardTitle>
         <CardDescription>

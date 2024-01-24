@@ -14,7 +14,7 @@ function ToggleLoginRegister() {
   };
 
   return (
-    <div className="flex gap-4 justify-center">
+    <div className="flex gap-4 justify-center absolute right-6 top-6">
       <label>Login</label>
       <Switch onCheckedChange={handleSwitchChange} checked={isRegister} />
       <label>Registrarte</label>
