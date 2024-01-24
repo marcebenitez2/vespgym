@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -12,7 +12,6 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { registerUser } from "../lib/firebase/register.js";
-import { toast } from "sonner";
 
 function Register() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -20,16 +19,24 @@ function Register() {
   const nameRef = useRef<HTMLInputElement>(null);
   const telRef = useRef<HTMLInputElement>(null);
   const direcRef = useRef<HTMLInputElement>(null);
+  const docRef = useRef<HTMLInputElement>(null);
+
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [docError, setDocError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    setEmailError(null);
+    setDocError(null);
 
     if (
       !emailRef.current ||
       !passwordRef.current ||
       !nameRef.current ||
       !telRef.current ||
-      !direcRef.current
+      !direcRef.current ||
+      !docRef.current
     ) {
       return;
     }
@@ -39,8 +46,20 @@ function Register() {
     const name: string = nameRef.current.value;
     const tel: string = telRef.current.value;
     const direc: string = direcRef.current.value;
+    const doc: string = docRef.current.value;
 
-    const user = await registerUser(email, password, name, tel, direc);
+    const user = await registerUser(
+      email,
+      password,
+      doc,
+      name,
+      tel,
+      direc
+    ).catch((error) => {
+      if (error.code === "auth/email-already-in-use") {
+        setEmailError("Error. Ya existe un usuario con ese correo");
+      }
+    });
   };
 
   return (
@@ -60,6 +79,9 @@ function Register() {
             placeholder="roman@gmail.com"
             ref={emailRef}
           />
+          <p className={`text-red-600 text-sm ${emailError ? "" : "hidden"}`}>
+            {emailError}
+          </p>
           <Label>Nombre</Label>
           <Input
             type="text"
@@ -67,6 +89,8 @@ function Register() {
             placeholder="Roman Berrugas"
             ref={nameRef}
           />
+          <Label>Documento</Label>
+          <Input type="text" id="doc" placeholder="44232238" ref={docRef} />
           <Label>Telefono</Label>
           <Input type="tel" id="tel" placeholder="3415690480" ref={telRef} />
           <Label>Direccion</Label>
