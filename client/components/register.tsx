@@ -1,4 +1,3 @@
-"use client";
 import { FormEvent, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import {
@@ -54,20 +53,25 @@ function Register() {
     const direc: string = direcRef.current.value;
     const doc: string = docRef.current.value;
 
-    const user = await registerUser(
-      email,
-      password,
-      doc,
-      name,
-      tel,
-      direc
-    ).catch((error) => {
-      if (error.code === "auth/email-already-in-use") {
-        setEmailError("Error. Ya existe un usuario con ese correo");
-      }
-    });
+    try {
+      const user = await registerUser({
+        email,
+        password,
+        name,
+        phone: tel,
+        direccion: direc,
+        doc,
+      });
 
-    
+      // Si llegamos aquí, el registro fue exitoso
+    } catch (error) {
+      if ((error as any).code === "auth/email-already-in-use") {
+        setEmailError("Error. Ya existe un usuario con ese correo");
+      } else {
+        console.error("Error al registrar usuario:", error);
+        toast("Error al registrar usuario ❌");
+      }
+    }
   };
 
   return (
@@ -121,7 +125,7 @@ function Register() {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={handleSubmit} type="submit">
+          <Button className="w-full" type="submit">
             Registrarse
           </Button>
         </CardFooter>
