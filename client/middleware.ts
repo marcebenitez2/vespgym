@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function authenticateUser(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   try {
     // Verifica si el usuario está autenticado
     const currentUser = request.cookies.get("currentUser");
@@ -10,7 +10,7 @@ export async function authenticateUser(request: NextRequest) {
       return NextResponse.next();
     } else {
       // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   } catch (error) {
     console.error(error);
@@ -18,3 +18,7 @@ export async function authenticateUser(request: NextRequest) {
     return NextResponse.error();
   }
 }
+
+export const config = {
+  matcher: ["/menu", "/menu/:path*"],
+};

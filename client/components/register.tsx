@@ -12,6 +12,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { registerUser } from "../lib/firebase/register";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 function Register() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -21,6 +22,7 @@ function Register() {
   const direcRef = useRef<HTMLInputElement>(null);
   const docRef = useRef<HTMLInputElement>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ function Register() {
     }
 
     try {
-      await registerUser({
+      const user = await registerUser({
         email,
         password,
         name,
@@ -49,6 +51,7 @@ function Register() {
         doc,
       });
 
+      router.push("/menu");
       // Si llegamos aquí, el registro fue exitoso
     } catch (error) {
       if (error instanceof Error) {
