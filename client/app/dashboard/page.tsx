@@ -1,5 +1,5 @@
 function Page() {
-  return <>Hola mundo</>;
+  return <>Hola mundo desde dashbord</>;
 }
 
 export default Page;
