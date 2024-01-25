@@ -5,6 +5,7 @@ import { db } from "./app";
 import { userSchema } from "../zod/userSchema";
 import useUserStore from "../store/user";
 
+
 // Datos que el usuario ingresa
 interface UserInputData {
   name: string;
@@ -12,7 +13,7 @@ interface UserInputData {
   password: string;
   doc: string;
   phone: string;
-  direccion: string;
+  direction: string;
 }
 
 // Datos almacenados en el contexto de Zustand
@@ -28,6 +29,8 @@ interface UserContext {
 
 // Datos que se almacenan en Firestore
 export interface User extends Omit<UserContext, "accessToken"> {}
+
+// Middleware de autenticación de usuario
 
 // Función de registro de usuario
 export const registerUser = async (
@@ -47,7 +50,7 @@ export const registerUser = async (
       uid: userCredential.user.uid,
       name: userInput.name,
       phone: userInput.phone,
-      direction: userInput.direccion,
+      direction: userInput.direction,
       email: userInput.email,
       doc: userInput.doc,
     } as UserContext);
@@ -63,12 +66,12 @@ export const registerUser = async (
       email: userInput.email,
       doc: userInput.doc,
       phone: userInput.phone,
-      direction: userInput.direccion,
+      direction: userInput.direction,
       accessToken,
     });
 
-    console.log(userCredential);
-    console.log(accessToken);
+    // Establecer el token de ID como una cookie en el navegador
+    document.cookie = `currentUser=${accessToken}`;
 
     // Devuelve el objeto completo, que incluye accessToken
     return {
@@ -77,7 +80,7 @@ export const registerUser = async (
       email: userInput.email,
       doc: userInput.doc,
       phone: userInput.phone,
-      direction: userInput.direccion,
+      direction: userInput.direction,
       accessToken,
     };
   } catch (error) {

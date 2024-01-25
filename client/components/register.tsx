@@ -17,10 +17,9 @@ function Register() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
-  const telRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
   const direcRef = useRef<HTMLInputElement>(null);
   const docRef = useRef<HTMLInputElement>(null);
-
   const [emailError, setEmailError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -28,48 +27,37 @@ function Register() {
 
     setEmailError(null);
 
-    if (
-      !emailRef.current ||
-      !passwordRef.current ||
-      !nameRef.current ||
-      !telRef.current ||
-      !direcRef.current ||
-      !docRef.current ||
-      !emailRef.current.value.trim() ||
-      !passwordRef.current.value.trim() ||
-      !nameRef.current.value.trim() ||
-      !telRef.current.value.trim() ||
-      !direcRef.current.value.trim() ||
-      !docRef.current.value.trim()
-    ) {
+    const email = emailRef.current?.value.trim();
+    const password = passwordRef.current?.value.trim();
+    const name = nameRef.current?.value.trim();
+    const phone = phoneRef.current?.value.trim();
+    const direction = direcRef.current?.value.trim();
+    const doc = docRef.current?.value.trim();
+
+    if (!email || !password || !name || !phone || !direction || !doc) {
       toast("Rellena todos los campos ❌❌");
       return;
     }
 
-    const email: string = emailRef.current.value;
-    const password: string = passwordRef.current.value;
-    const name: string = nameRef.current.value;
-    const tel: string = telRef.current.value;
-    const direc: string = direcRef.current.value;
-    const doc: string = docRef.current.value;
-
     try {
-      const user = await registerUser({
+      await registerUser({
         email,
         password,
         name,
-        phone: tel,
-        direccion: direc,
+        phone,
+        direction,
         doc,
       });
 
       // Si llegamos aquí, el registro fue exitoso
     } catch (error) {
-      if ((error as any).code === "auth/email-already-in-use") {
-        setEmailError("Error. Ya existe un usuario con ese correo");
-      } else {
-        console.error("Error al registrar usuario:", error);
-        toast("Error al registrar usuario ❌");
+      if (error instanceof Error) {
+        if (error.message.includes("auth/email-already-in-use")) {
+          setEmailError("Error. Ya existe un usuario con ese correo");
+        } else {
+          console.error("Error al registrar usuario:", error);
+          toast("Error al registrar usuario ❌");
+        }
       }
     }
   };
@@ -107,7 +95,12 @@ function Register() {
             <Label>Documento</Label>
             <Input type="text" id="doc" placeholder="44232238" ref={docRef} />
             <Label>Telefono</Label>
-            <Input type="tel" id="tel" placeholder="3415690480" ref={telRef} />
+            <Input
+              type="tel"
+              id="tel"
+              placeholder="3415690480"
+              ref={phoneRef}
+            />
             <Label>Direccion</Label>
             <Input
               type="text"
