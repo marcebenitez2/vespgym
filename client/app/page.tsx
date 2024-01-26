@@ -3,7 +3,7 @@ import SectionLog from "@/components/sectionLog";
 
 export default function Home() {
   return (
-    <main className="flex w-screen h-screen">
+    <main className="w-screen h-screen max-h-screen flex">
       <CarouselPlugin />
       <SectionLog />
     </main>
