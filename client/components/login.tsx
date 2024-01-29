@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { FormEvent, useRef } from "react";
 import { loginUser } from "../lib/firebase/login";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/lib/store/user";
 
 function Login() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -21,22 +22,26 @@ function Login() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+  
     if (!emailRef.current || !passwordRef.current) {
       return;
     }
-
+  
     const email: string = emailRef.current.value;
     const password: string = passwordRef.current.value;
-
-    await loginUser({ email, password })
-      .then(() => {
-        router.push("/dashboard");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  
+    try {
+      const user = await loginUser({ email, password });
+      useUserStore.setState((state) => ({
+        ...state,
+        ...user,
+      }));
+      router.push("/dashboard");
+    } catch (error) {
+      console.log("Login error:", error);
+    }
   };
+  
 
   return (
     <Card className="w-2/3 pb-4 animate-fade animate-once animate-duration-500">
@@ -56,7 +61,7 @@ function Login() {
               placeholder="roman@gmail.com"
               ref={emailRef}
             />
-            <Label htmlFor="email">Contraseña</Label>
+            <Label htmlFor="password">Contraseña</Label>
             <Input
               type="password"
               id="password"
