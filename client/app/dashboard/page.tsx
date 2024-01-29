@@ -6,7 +6,7 @@ function Page() {
   const router = useRouter();
 
   return (
-    <main className="h-full w-full px-36 py-20 grid grid-cols-3 grid-rows-2 gap-8  bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
+    <main className="h-full w-full px-36 py-20 grid grid-cols-3 grid-rows-2 gap-8">
       <div
         className="row-span-2 border rounded-lg w-full h-full  flex justify-center items-center card card1"
         onClick={() => router.push("/dashboard/reservar")}
@@ -36,3 +36,6 @@ function Page() {
 }
 
 export default Page;
+
+
+// bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]
