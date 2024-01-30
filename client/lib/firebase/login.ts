@@ -42,6 +42,7 @@ export const loginUser = async (credenciales: LoginUserInput) => {
       direction: userData.direction,
       avatar: "",
     };
+    
   } catch (error) {
     console.error("Login error:", error);
     throw error; // Rethrow the error to be caught in the Login component

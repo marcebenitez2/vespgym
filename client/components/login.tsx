@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { FormEvent, useRef } from "react";
 import { loginUser } from "../lib/firebase/login";
 import { useRouter } from "next/navigation";
-import useUserStore from "@/lib/store/user";
 
 function Login() {
   const emailRef = useRef<HTMLInputElement>(null);
@@ -32,10 +31,7 @@ function Login() {
   
     try {
       const user = await loginUser({ email, password });
-      useUserStore.setState((state) => ({
-        ...state,
-        ...user,
-      }));
+      sessionStorage.setItem("user", JSON.stringify(user));
       router.push("/dashboard");
     } catch (error) {
       console.log("Login error:", error);

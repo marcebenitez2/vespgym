@@ -6,7 +6,7 @@ function Page() {
   const router = useRouter();
 
   return (
-    <main className="h-full w-full px-36 py-20 grid grid-cols-3 grid-rows-2 gap-8">
+    <main className="h-screen w-full px-36 py-20 grid grid-cols-3 grid-rows-2 gap-8">
       <div
         className="row-span-2 border rounded-lg w-full h-full  flex justify-center items-center card card1"
         onClick={() => router.push("/dashboard/reservar")}

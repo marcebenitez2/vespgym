@@ -1,18 +1,14 @@
-"use client"
+"use client";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import useUserStore from "@/lib/store/user";
 
 export default function page() {
-
-  const user = useUserStore((state) => state);
-  console.log(user);
-
+  const user = sessionStorage.getItem("user");
 
   return (
-    <div className="h-full w-full px-44 py-32">
+    <div className="h-screen w-full px-44 py-32">
       <div className="border w-full h-full rounded-lg flex px-16 py-10">
         <div className="h-full w-full flex flex-col gap-14">
           <h1 className="text-3xl font-semibold text-yellow-400">
