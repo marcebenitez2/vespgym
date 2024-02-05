@@ -6,14 +6,40 @@ import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import useSessionStorage from "@/hooks/useSessionStorage";
 import { UserInterface } from "@/lib/interface/interfaces";
+import { useRef } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function page() {
   const router = useRouter();
 
   const user: UserInterface | null = useSessionStorage("user");
 
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const docRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const directionRef = useRef<HTMLInputElement>(null);
+  const avatarRef = useRef<HTMLInputElement>(null);
+
+  const handleSave = () => {
+    const name = nameRef.current?.value;
+    const email = emailRef.current?.value;
+    const doc = docRef.current?.value;
+    const phone = phoneRef.current?.value;
+    const direction = directionRef.current?.value;
+    const avatar = avatarRef.current?.files;
+    console.log(name, email, doc, phone, direction, avatar);
+  };
+
   return (
-    <div className="h-screen w-full px-40 py-32 lgn:h-full lgn:py-5">
+    <div className="h-screen w-full px-40 py-32 lgn:h-full lgn:py-5 lgn:px-2">
       <div className="border w-full h-full rounded-lg flex px-16 py-10 lgn:flex-col-reverse lgn:py-5 lgn:px-4">
         <FaArrowLeft
           className="text-5xl text-yellow-400 lgn:hidden absolute left-10 top-10"
@@ -26,7 +52,12 @@ export default function page() {
           <div className="flex flex-col h-full w-full gap-7 pr-32 lgn:pr-0">
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="name">Nombre</Label>
-              <Input type="text" id="name" defaultValue={user?.name || ""} />
+              <Input
+                type="text"
+                id="name"
+                defaultValue={user?.name || ""}
+                ref={nameRef}
+              />
             </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="email">Email</Label>
@@ -35,6 +66,7 @@ export default function page() {
                 type="email"
                 id="mail"
                 defaultValue={user?.email || ""}
+                ref={emailRef}
               />
             </div>
             <div className="grid w-full items-center gap-1.5">
@@ -44,11 +76,17 @@ export default function page() {
                 type="text"
                 id="doc"
                 defaultValue={user?.doc || ""}
+                ref={docRef}
               />
             </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="tel">Telefono</Label>
-              <Input type="text" id="tel" defaultValue={user?.phone || ""} />
+              <Input
+                type="text"
+                id="tel"
+                defaultValue={user?.phone || ""}
+                ref={phoneRef}
+              />
             </div>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="dir">Direccion</Label>
@@ -56,6 +94,7 @@ export default function page() {
                 type="text"
                 id="dir"
                 defaultValue={user?.direction || ""}
+                ref={directionRef}
               />
             </div>
           </div>
@@ -76,17 +115,35 @@ export default function page() {
             </div>
             <div className="grid w-full  items-center gap-1.5">
               <Label htmlFor="picture">Picture</Label>
-              <Input id="picture" type="file" />
+              <Input id="picture" type="file" ref={avatarRef} />
             </div>
           </div>
+         <DialogComponent/>
           <div className="flex gap-4 h-full items-end lgn:hidden">
             <Button className="bg-red-600 text-white hover:bg-red-800">
               Eliminar perfil
             </Button>
-            <Button>Guardar</Button>
+            <Button onClick={handleSave}>Guardar</Button>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+const DialogComponent = () => {
+  return (
+    <Dialog>
+      <DialogTrigger><Button>Cambiar Contrasena</Button></DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </DialogDescription>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
+  );
+};
