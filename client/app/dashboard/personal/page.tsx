@@ -16,6 +16,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { changePasswordFunc } from "@/lib/firebase/saveChanges";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function page() {
   const router = useRouter();
@@ -36,7 +39,13 @@ export default function page() {
     const phone = phoneRef.current?.value;
     const direction = directionRef.current?.value;
     const avatar = avatarRef.current?.files;
-    console.log(name, email, doc, phone, direction, avatar);
+
+    if (name && email && doc && phone && direction) {
+      console.log(name, email, doc, phone, direction, avatar);
+    } else {
+      console.log("Todos los campos son requeridos");
+      toast.error("Todos los campos son requeridos");
+    }
   };
 
   return (
@@ -103,7 +112,7 @@ export default function page() {
             <Button className="bg-red-600 text-white hover:bg-red-800">
               Eliminar perfil
             </Button>
-            <Button>Guardar</Button>
+            <Button onClick={handleSave}>Guardar</Button>
           </div>
         </div>
         <div className="w-full h-full flex flex-col items-center py-5 gap-4">
@@ -128,6 +137,7 @@ export default function page() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
@@ -143,8 +153,8 @@ const DialogComponent = () => {
       passNewRef.current?.value
     ) {
       changePasswordFunc(
-        user?.email,
-        user?.password,
+        user?.email || "",
+        user?.password || "",
         passNewRef.current?.value
       );
     }
