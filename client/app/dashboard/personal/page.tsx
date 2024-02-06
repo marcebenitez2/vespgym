@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { changePasswordFunc } from "@/lib/firebase/saveChanges";
 
 export default function page() {
   const router = useRouter();
@@ -118,7 +119,7 @@ export default function page() {
               <Input id="picture" type="file" ref={avatarRef} />
             </div>
           </div>
-         <DialogComponent/>
+          <DialogComponent />
           <div className="flex gap-4 h-full items-end lgn:hidden">
             <Button className="bg-red-600 text-white hover:bg-red-800">
               Eliminar perfil
@@ -132,17 +133,46 @@ export default function page() {
 }
 
 const DialogComponent = () => {
+  const passOldRef = useRef<HTMLInputElement>(null);
+  const passNewRef = useRef<HTMLInputElement>(null);
+  const user: UserInterface | null = useSessionStorage("user");
+
+  const changePassword = () => {
+    if (
+      passOldRef.current?.value === user?.password &&
+      passNewRef.current?.value
+    ) {
+      changePasswordFunc(
+        user?.email,
+        user?.password,
+        passNewRef.current?.value
+      );
+    }
+  };
+
   return (
     <Dialog>
-      <DialogTrigger><Button>Cambiar Contrasena</Button></DialogTrigger>
+      <DialogTrigger className="bg-red-600 px-5 py-2 rounded-lg">
+        Cambiar contrasena
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you absolutely sure?</DialogTitle>
+          <DialogTitle>Cambiar la contraseña</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            Para cambiar la contraseña primero coloca la anterior
           </DialogDescription>
         </DialogHeader>
+        <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col w-full gap-2">
+            <Label htmlFor="passOld">Contraseña anterior</Label>
+            <Input type="password" id="passOld" ref={passOldRef} />
+          </div>
+          <div className="flex flex-col w-full gap-2">
+            <Label htmlFor="passNew">Nueva contraseña</Label>
+            <Input type="password" id="passNew" ref={passNewRef} />
+          </div>
+        </div>
+        <Button onClick={changePassword}>Guardar</Button>
       </DialogContent>
     </Dialog>
   );
