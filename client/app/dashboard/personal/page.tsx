@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FaArrowLeft } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import useSessionStorage from "@/hooks/useSessionStorage";
 import { UserInterface } from "@/lib/interface/interfaces";
@@ -15,10 +16,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { changePasswordFunc } from "@/lib/firebase/saveChanges";
+import {
+  changePasswordFunc,
+  saveAvatar,
+  saveChangesPerfil,
+} from "@/lib/firebase/saveChanges";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
+import { userSchema } from "@/lib/zod/userSchema";
+import Image from "next/image";
 
 export default function page() {
   const router = useRouter();
@@ -32,7 +38,7 @@ export default function page() {
   const directionRef = useRef<HTMLInputElement>(null);
   const avatarRef = useRef<HTMLInputElement>(null);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const name = nameRef.current?.value;
     const email = emailRef.current?.value;
     const doc = docRef.current?.value;
@@ -41,9 +47,26 @@ export default function page() {
     const avatar = avatarRef.current?.files;
 
     if (name && email && doc && phone && direction) {
-      console.log(name, email, doc, phone, direction, avatar);
+      userSchema.parse({
+        email,
+        password: user?.password || "",
+        doc,
+        name,
+        phone,
+        direction,
+      });
+
+      if (avatar && avatar.length > 0) {
+        const avatarURL = await saveAvatar(avatar[0]);
+
+        if (avatarURL !== undefined) {
+          saveChangesPerfil(name, email, doc, phone, direction, avatarURL);
+        } else {
+          console.error("La URL del avatar es undefined.");
+          // Manejar el caso en que la URL del avatar es undefined.
+        }
+      }
     } else {
-      console.log("Todos los campos son requeridos");
       toast.error("Todos los campos son requeridos");
     }
   };
@@ -121,7 +144,16 @@ export default function page() {
           </h1>
           <div className="w-full flex justify-center flex-col items-center gap-8 ">
             <div className="w-64 h-64 rounded-full border flex justify-center items-center text-5xl lgn:w-40 lgn:h-40">
-              +
+              {user?.avatar ? (
+                <Image
+                  src={user.avatar}
+                  alt={user.name}
+                  fill={true}
+                  sizes="100%"
+                />
+              ) : (
+                <FaUser />
+              )}
             </div>
             <div className="grid w-full  items-center gap-1.5">
               <Label htmlFor="picture">Picture</Label>
