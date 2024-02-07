@@ -66,10 +66,11 @@ export default function page() {
           // Manejar el caso en que la URL del avatar es undefined.
         }
       }
-    } else {
-      toast.error("Todos los campos son requeridos");
+
+      saveChangesPerfil(name, email, doc, phone, direction, user?.avatar);
     }
   };
+  console.log(user?.avatar)
 
   return (
     <div className="h-screen w-full px-40 py-32 lgn:h-full lgn:py-5 lgn:px-2">
@@ -148,8 +149,10 @@ export default function page() {
                 <Image
                   src={user.avatar}
                   alt={user.name}
-                  fill={true}
-                  sizes="100%"
+                  width={256}
+                  height={256}
+                  className="rounded-full"
+                  priority={true}
                 />
               ) : (
                 <FaUser />

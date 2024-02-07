@@ -40,7 +40,7 @@ export const loginUser = async (credenciales: LoginUserInput) => {
       accessToken,
       phone: userData.phone,
       direction: userData.direction,
-      avatar: "",
+      avatar: userData.avatar,
     };
     
   } catch (error) {

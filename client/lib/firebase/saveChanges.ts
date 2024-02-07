@@ -14,15 +14,13 @@ export const saveChangesPerfil = async (
   docId: string,
   phone: string,
   direction: string,
-  avatarURL: string
+  avatarURL: string | undefined
 ) => {
   const user = auth.currentUser;
   if (user) {
     const userRef = doc(db, "users", user.uid);
     try {
-      const documentRef = doc(userRef, docId);
-
-      await updateDoc(documentRef, {
+      await updateDoc(userRef, {
         name,
         email,
         doc: docId,
@@ -31,10 +29,8 @@ export const saveChangesPerfil = async (
         avatar: avatarURL,
       });
 
-      // Obtener datos actuales de sessionStorage
       const currentData = JSON.parse(sessionStorage.getItem("user") || "{}");
 
-      // Actualizar los campos necesarios
       currentData.name = name;
       currentData.email = email;
       currentData.doc = docId;
@@ -42,7 +38,6 @@ export const saveChangesPerfil = async (
       currentData.direction = direction;
       currentData.avatar = avatarURL;
 
-      // Volver a almacenar los datos actualizados en sessionStorage
       sessionStorage.setItem("user", JSON.stringify(currentData));
     } catch (error) {
       console.error("Error updating document: ", error);

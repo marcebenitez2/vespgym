@@ -1,10 +1,9 @@
 import { createUserWithEmailAndPassword, Auth, getAuth } from "firebase/auth";
 import { auth } from "./app";
-import { collection, addDoc, Firestore } from "firebase/firestore";
+import { collection, addDoc, Firestore, setDoc, doc } from "firebase/firestore";
 import { db } from "./app";
 import { userSchema } from "../zod/userSchema";
 import useUserStore from "../store/user";
-
 
 // Datos que el usuario ingresa
 interface UserInputData {
@@ -46,7 +45,7 @@ export const registerUser = async (
     );
 
     // Almacena los datos del usuario en Firestore sin incluir el accessToken
-    await addDoc(collection(db as Firestore, "users"), {
+    await setDoc(doc(db as Firestore, "users", userCredential.user.uid), {
       uid: userCredential.user.uid,
       name: userInput.name,
       phone: userInput.phone,
